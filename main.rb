@@ -20,7 +20,6 @@ puts "#{teacher.name} can use services: #{teacher.can_use_services?}" # Should b
 # Test play_hooky? method
 puts "#{student.name} play_hooky: #{student.play_hooky}"
 
-
 # Test the decorators
 person = Person.new(22, name: 'maximilianus')
 puts "Original Name: #{person.correct_name}"
