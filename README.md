@@ -31,7 +31,7 @@
 
 > Project description.
 
-**[School Library]** is a Ruby program that uses Enumerable. 
+**[School Library]** is a Ruby program that uses classes, inheritance, encapsulation and abstraction to manage students lending of books in a library. 
 
 ## 🛠 Built With <a name="built-with"></a>
 
@@ -54,6 +54,8 @@
 > Key features of the application include.
 
 - **[OOP in Ruby]**
+- **[Decorators Design Parterns]**
+- **[Associations Design Parterns]**
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
