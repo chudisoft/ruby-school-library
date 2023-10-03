@@ -19,3 +19,14 @@ puts "#{teacher.name} can use services: #{teacher.can_use_services?}" # Should b
 
 # Test play_hooky? method
 puts "#{student.name} play_hooky: #{student.play_hooky}"
+
+
+# Test the decorators
+person = Person.new(22, name: 'maximilianus')
+puts "Original Name: #{person.correct_name}"
+
+capitalized_person = CapitalizeDecorator.new(person)
+puts "Capitalized Name: #{capitalized_person.correct_name}"
+
+capitalized_trimmed_person = TrimmerDecorator.new(capitalized_person)
+puts "Capitalized and Trimmed Name: #{capitalized_trimmed_person.correct_name}"
