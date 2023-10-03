@@ -3,10 +3,10 @@ require_relative 'student'
 require_relative 'teacher'
 
 # Create instances of Person, Student, and Teacher
-person = Person.new(25, 'John', false)
-student = Student.new(17, 'Math', 'Alice', true)
-student_b = Student.new(17, 'Math', 'Chudisoft', false)
-teacher = Teacher.new(30, 'History', 'Mr. Smith')
+person = Person.new(25, name: 'John', parent_permission: false)
+student = Student.new('Math', 17, name: 'Alice', parent_permission: true)
+student_b = Student.new('Math', 17, name: 'Chudisoft', parent_permission: false)
+teacher = Teacher.new('History', 30, name: 'Mr. Smith')
 
 # Test can_use_services? method
 puts "#{person.name} can use services: #{person.can_use_services?}" # Should be true (age >= 18)

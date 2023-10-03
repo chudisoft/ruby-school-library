@@ -1,11 +1,10 @@
 class Person
-  attr_reader :id
-  attr_accessor :name, :age
+  attr_reader :id, :name, :age
 
-  def initialize(age, name = 'Unknown', parent_permission = true)
+  def initialize(age, name: 'Unknown', parent_permission: true)
     @id = generate_id
     @name = name
-    @age = age.to_i
+    @age = age
     @parent_permission = parent_permission
   end
 
@@ -16,7 +15,7 @@ class Person
   private
 
   def of_age?
-    @age >= 18
+    @age.to_i >= 18
   end
 
   def generate_id
