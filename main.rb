@@ -5,7 +5,8 @@ require_relative 'teacher'
 # Create instances of Person, Student, and Teacher
 person = Person.new(25, name: 'John', parent_permission: false)
 student = Student.new('Math', 17, name: 'Alice', parent_permission: true)
-student_b = Student.new('Math', 17, name: 'Chudisoft', parent_permission: false)
+student_b = Student.new('Math', 17, name: 'Erick', parent_permission: false)
+student_b.name = 'Chudisoft'
 teacher = Teacher.new('History', 30, name: 'Mr. Smith')
 
 # Test can_use_services? method
