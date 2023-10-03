@@ -1,6 +1,8 @@
 require_relative 'person'
 require_relative 'student'
 require_relative 'teacher'
+require_relative 'capitalize_decorator'
+require_relative 'trimmer_decorator'
 
 # Create instances of Person, Student, and Teacher
 person = Person.new(25, name: 'John', parent_permission: false)
