@@ -57,6 +57,7 @@ person2 = Person.new(25, name: 'Jane', parent_permission: true)
 Rental.new('2023-10-01', person, book1)
 Rental.new('2023-10-02', person, book2)
 Rental.new('2023-10-03', person2, book1)
+Rental.new('2023-10-03', person2, book1)
 
 # Print People and their Rentals
 puts "\nPeople and their Rentals:"

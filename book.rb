@@ -9,6 +9,7 @@ class Book
   end
 
   def add_rental(rental)
-    @rentals << rental
+    existing_rental = @rentals.find { |r| r.date == rental.date }
+    @rentals << rental unless existing_rental
   end
 end
