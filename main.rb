@@ -7,72 +7,131 @@ require_relative 'rental'
 require_relative 'book'
 require_relative 'classroom'
 
-# Create instances of Person, Student, and Teacher
-person = Person.new(25, name: 'John', parent_permission: false)
-student = Student.new('Math', 17, name: 'Alice', parent_permission: true)
-student_b = Student.new('Math', 17, name: 'Erick', parent_permission: false)
-student_b.name = 'Chudisoft'
-teacher = Teacher.new('History', 30, name: 'Mr. Smith')
+class Main
+  def initialize
+    @people = []
+    @books = []
+    @rentals = []
+  end
 
-# Test can_use_services? method
-puts "#{person.name} can use services: #{person.can_use_services?}" # Should be true (age >= 18)
-puts "#{student.name} can use services: #{student.can_use_services?}" # Should be true (parent permission)
-puts "#{student_b.name} can use services: #{student_b.can_use_services?}" # Should be false (parent permission)
-puts "#{teacher.name} can use services: #{teacher.can_use_services?}" # Should be true (overridden method)
+  def main
+    puts 'Welcome to the Library Management System!'
+    app = App.new(self)
+    app.run
+  end
 
-# Test play_hooky? method
-puts "#{student.name} play_hooky: #{student.play_hooky}"
+  # Implement methods for listing books, people, creating people, creating books, creating rentals,
+  # and listing rentals for a given person here.
 
-# Test the decorators
-person = Person.new(22, name: 'maximilianus')
-puts "Original Name: #{person.correct_name}"
+  def list_books
+    puts "List of Books (#{@books.length}):"
+    @books.each do |book|
+      puts "#{book.title} by #{book.author}"
+    end
+  end
 
-capitalized_person = CapitalizeDecorator.new(person)
-puts "Capitalized Name: #{capitalized_person.correct_name}"
+  def list_people
+    puts "List of People (#{@people.length}):"
+    @people.each do |person|
+      puts "#{person.name} (#{person.is_a?(Student) ? 'Student' : 'Teacher'})"
+    end
+  end
 
-capitalized_trimmed_person = TrimmerDecorator.new(capitalized_person)
-puts "Capitalized and Trimmed Name: #{capitalized_trimmed_person.correct_name}"
+  def create_person
+    print 'Enter the name of the person: '
+    name = gets.chomp
+    puts 'Choose the type of person:'
+    puts '1. Student'
+    puts '2. Teacher'
+    print 'Enter the type (1 or 2): '
+    type = gets.chomp.to_i
 
-# Test Associations
-# Create a Classroom
-classroom = Classroom.new('Math Class')
-classroom.add_student(student)
-classroom.add_student(student_b)
+    if type == 1
+      student = create_student(name)
+      @people << student unless student.nil?
+      puts "Student #{name} created."
+    elsif type == 2
+      teacher = create_teacher(name)
+      @people << teacher unless teacher.nil?
+      puts "Teacher #{name} created."
+    else
+      puts 'Invalid choice. No person created.'
+    end
+  end
 
-# Print the Classroom label and its students
-puts "Classroom Label: #{classroom.label}"
-puts 'Students in Classroom:'
-classroom.students.each do |s|
-  puts "- #{s.name}"
-end
+  def create_student(name)
+    print 'Enter the classroom of the person: '
+    classroom = gets.chomp.to_str
+    return nil unless classroom.length >= 1
 
-# Create Books
-book1 = Book.new('Book 1', 'Author 1')
-book2 = Book.new('Book 2', 'Author 2')
+    print 'Enter the student age (numeric): '
+    age = gets.chomp.to_i
+    return nil unless age.positive?
 
-# Create more persons
-person2 = Person.new(25, name: 'Jane', parent_permission: true)
+    puts 'Choose the type of parent permission (1 for true or 2 for false): '
+    parent_permission = gets.chomp.to_i
 
-# Create Rentals and associate Books and People
-Rental.new('2023-10-01', person, book1)
-Rental.new('2023-10-02', person, book2)
-Rental.new('2023-10-03', person2, book1)
-Rental.new('2023-10-03', person2, book1)
+    Student.new(classroom, age, name: name, parent_permission: parent_permission == 1)
+  end
 
-# Print People and their Rentals
-puts "\nPeople and their Rentals:"
-[person, person2].each do |p|
-  puts "#{p.name}'s Rentals:"
-  p.rentals.each do |rental|
-    puts "- #{rental.book.title} by #{rental.book.author}, Date: #{rental.date}"
+  def create_teacher(name)
+    print 'Enter the specialization of the person: '
+    specialization = gets.chomp
+    return nil unless specialization.length >= 1
+
+    print 'Enter the teacher\'s age (numeric): '
+    age = gets.chomp.to_i
+    return nil unless age.positive?
+
+    puts 'Choose the type of parent permission (1 for true or 2 for false): '
+    parent_permission = gets.chomp.to_i
+
+    Teacher.new(specialization, age, name: name, parent_permission: parent_permission == 1)
+  end
+
+  def create_book
+    print 'Enter the title of the book: '
+    title = gets.chomp
+    print 'Enter the author of the book: '
+    author = gets.chomp
+
+    book = Book.new(title, author)
+    @books << book
+    puts "Book '#{book.title}' by #{book.author} created."
+  end
+
+  def create_rental
+    list_people
+    print 'Enter the ID of the person who is renting a book: '
+    person_id = gets.chomp.to_i
+    person = @people.find { |p| p.object_id == person_id }
+
+    list_books
+    print 'Enter the ID of the book being rented: '
+    book_id = gets.chomp.to_i
+    book = @books.find { |b| b.object_id == book_id }
+
+    print 'Enter the rental date (YYYY-MM-DD): '
+    date = gets.chomp
+
+    rental = Rental.new(date, person, book)
+    @rentals << rental
+    puts "Rental created for #{person.name}: #{book.title} on #{date}."
+  end
+
+  def list_rentals_for_person
+    list_people
+    print 'Enter the ID of the person to list their rentals: '
+    person_id = gets.chomp.to_i
+    person = @people.find { |p| p.object_id == person_id }
+
+    puts "Rentals for #{person.name}:"
+    rentals = @rentals.select { |r| r.person == person }
+    rentals.each do |rental|
+      puts "#{rental.book.title} by #{rental.book.author}, rented on #{rental.date}"
+    end
   end
 end
 
-# Print Books and their Rentals
-puts "\nBooks and their Rentals:"
-[book1, book2].each do |b|
-  puts "#{b.title}'s Rentals:"
-  b.rentals.each do |rental|
-    puts "- by #{rental.person.id} #{rental.person.name}, Date: #{rental.date}"
-  end
-end
+# main = Main.new
+# main.main
