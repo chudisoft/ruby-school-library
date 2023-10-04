@@ -1,5 +1,3 @@
-# main = Main.new
-# main.main
 require_relative 'app'
 
 class Main

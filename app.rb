@@ -74,10 +74,7 @@ class App
     age = gets.chomp.to_i
     return nil unless age.positive?
 
-    print 'Parent permission (y for true or n for false): '
-    parent_permission = gets.chomp
-
-    Teacher.new(specialization, age, name: name, parent_permission: parent_permission.downcase == 'y')
+    Teacher.new(specialization, age, name: name)
   end
 
   def create_book
