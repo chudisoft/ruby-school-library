@@ -1,8 +1,6 @@
 require_relative 'person'
 require_relative 'student'
 require_relative 'teacher'
-require_relative 'capitalize_decorator'
-require_relative 'trimmer_decorator'
 require_relative 'rental'
 require_relative 'book'
 require_relative 'classroom'
@@ -102,9 +100,11 @@ class App
     print 'Enter the rental date (YYYY-MM-DD): '
     date = gets.chomp
 
+    existing_rental = @rentals.find { |r| r.date == rental.date }
     rental = Rental.new(date, person, book)
-    @rentals << rental
-    puts "Rental created for #{person.name}: #{book.title} on #{date}."
+    @rentals << rental unless existing_rental
+    puts "Rental created for #{person.name}: #{book.title} on #{date}." unless existing_rental
+    puts "Duplicate! unable to create rental for: #{book.title} on #{date}." if existing_rental
   end
 
   def list_rentals_for_person

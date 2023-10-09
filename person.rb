@@ -1,6 +1,4 @@
-require_relative 'nameable'
-
-class Person < Nameable
+class Person
   attr_reader :id, :rentals
   attr_accessor :name, :age
 
@@ -9,17 +7,6 @@ class Person < Nameable
     @name = name
     @age = age
     @parent_permission = parent_permission
-    @rentals = []
-    super()
-  end
-
-  def add_rental(rental)
-    existing_rental = @rentals.find { |r| r.date == rental.date }
-    @rentals << rental unless existing_rental
-  end
-
-  def correct_name
-    @name
   end
 
   def can_use_services?
