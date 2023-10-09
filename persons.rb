@@ -67,4 +67,8 @@ class Persons < ActionInterface
 
     Teacher.new(specialization, age, name: name)
   end
+
+  def find(&block)
+    @people.find(&block)
+  end
 end

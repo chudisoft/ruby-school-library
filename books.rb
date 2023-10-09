@@ -29,4 +29,8 @@ class Books < ActionInterface
     @books << book
     puts "Book '#{book.title}' by #{book.author} created."
   end
+
+  def find(&block)
+    @books.find(&block)
+  end
 end
