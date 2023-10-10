@@ -6,16 +6,12 @@ class Main
   end
 
   def run
-    actions = [
-      -> { @app.list_books }, -> { @app.list_people }, -> { @app.create_person }, -> { @app.create_book },
-      -> { @app.create_rental }, -> { @app.list_rentals_for_person }
-    ]
     loop do
       display_menu
       choice = gets.chomp.to_i
       case choice
       when 1..6
-        actions[choice - 1].call
+        @app.actions[choice - 1].call
       when 7
         puts 'Exiting the app. Goodbye!'
         break
