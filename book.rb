@@ -7,4 +7,8 @@ class Book
     @title = title
     @author = author
   end
+
+  def to_hash
+    { 'title' => @title, 'author' => @author }
+  end
 end

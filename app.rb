@@ -6,9 +6,9 @@ class App
   attr_accessor :actions
 
   def initialize
-    @books = Books.new([])
-    @rentals = Rentals.new([])
-    @people = Persons.new([])
+    @books = Books.new
+    @rentals = Rentals.new
+    @people = Persons.new
     @actions = [
       -> { @books.list_all }, -> { @people.list_all },
       -> { @people.create }, -> { @books.create },

@@ -2,11 +2,46 @@ require_relative 'book'
 require_relative 'person'
 require_relative 'rental'
 require_relative 'action_interface'
+require_relative 'persons_module'
+require 'json'
 
 class Rentals < ActionInterface
-  def initialize(rentals)
-    @rentals = rentals
+  include PersonsModule
+  def initialize()
+    @rentals = read_rentals_from_json_file
     super()
+  end
+
+  def read_rentals_from_json_file()
+    file_path = 'rentals.json'
+    rentals = []
+    return rentals unless File.exist?(file_path)
+
+    begin
+      # Read the JSON file
+      json_data = File.read(file_path)
+
+      # Parse the JSON data into an array of hashes
+      rental_hashes = JSON.parse(json_data)
+
+      # Create Book objects from each hash and add them to the array
+      rental_hashes.each do |hash|
+        book = Book.new(hash['book']['title'], hash['book']['author'])
+        person = get_person(hash['person'])
+        rental = Rental.new(hash['date'], book, person)
+        rentals << rental
+      end
+    rescue StandardError => e
+      puts "An error occurred: #{e.message}"
+    end
+
+    rentals
+  end
+
+  def save
+    rentals_hashes = @rentals.map(&:to_hash)
+    rentals_json = JSON.pretty_generate(rentals_hashes)
+    File.write('rentals.json', rentals_json)
   end
 
   def create(books, people)
@@ -26,8 +61,8 @@ class Rentals < ActionInterface
     existing_rental = @rentals.find { |r| r.date == rental.date }
     rental = Rental.new(date, person, book)
     @rentals << rental unless existing_rental
-    puts "Rental created for #{person.name}: #{book.title} on #{date}." unless existing_rental
-    puts "Duplicate! unable to create rental for: #{book.title} on #{date}." if existing_rental
+    save unless existing_rental
+    puts existing_rental ? "Duplicate! unable to create rental for: #{book.title} on #{date}." : "Rental created for #{person.name}: #{book.title} on #{date}."
   end
 
   def list_all(people)
